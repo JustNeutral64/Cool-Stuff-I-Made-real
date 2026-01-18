@@ -1,0 +1,1320 @@
+#---------------------------------------------------------------
+"""
+Complete Documentation for turtle: 
+https://docs.python.org/3/library/turtle.html#turtle-methods
+"""
+#---------------------------------------------------------------
+penup()
+setposition(1000, 1000)
+
+from turtle import *
+from turtle import Turtle
+import random
+import time
+
+screen = Screen()
+screen.tracer(20000, 1)
+player = Turtle()
+room_drawer = Turtle()
+treasure = Turtle()
+player.shape("turtle")
+player.penup()
+player.home()
+player.speed(0)
+player.setposition(0, 0)
+room_drawer.speed(0)
+room_drawer.hideturtle()
+treasure.penup()
+treasure.setposition(1000, 1000)
+treasure.shape("classic")
+treasure.setheading(90)
+#print("Welcome to prototype 1! Controls are Space to jump, [a] and [d] to move left and right, and [s] to stop moving left or right.") ok imma be real honest i forgot this was here bc i turned console off
+#---------------------------------------------------------------
+arbitrary_value_that_will_never_change = 1
+igt = 0
+x = -150 #-151 for tutorial_1
+y = -151 #-151 for tutorial_1
+lap = 1
+win = 0
+panic = 0
+panic_box_height = -260
+orb = 0
+orb_x = 1000
+orb_y = 1000
+camera_x = 0
+camera_y = 0
+player_x = 0
+player_y = 0
+x_speed = 0
+y_speed = 0
+left = 0
+right = 0
+jumping = 0
+last_value = 0
+orb_speed = 2.5
+falling = 1
+heading = 0
+wallrunning = 0
+dashing = 0
+potential_x_speed = 0
+drifting = 0
+wallrun_jumping = 0
+anchoring_y = 0
+anchoring_x = 0
+set_heading_amount = 0
+anchor_x = "undefined"
+anchor_y = "undefined"
+fps = float(0.01) #Mac: 0.0075, windows = 0.01
+fps = float(input("what do you want your frame delay to be? \nThis directly affects your fps. \nA good starting value is 0.0075. \nYour fps counter should be around 60. \nIf your average fps is lower than 60, decrease the frame delay. \nIf your average fps is above 60, increase the frame delay. "))
+for i in range(50):
+    print("")
+last_x_speed = 0
+frame = 0
+last_frame = 0
+super_jumping = 0
+pounding = 0
+frames_per_second = 0
+drawing_text_box = 1
+text_box_size = 1
+red_room_color = 255
+green_room_color = 0
+blue_room_color = 0
+room_color_cycle = 1
+line_one_text = "Line 1"
+line_two_text = "Line 2"
+line_three_text = "Line 3"
+line_four_text = "Line 4"
+line_five_text = "Line 5"
+line_six_text = "Line 6"
+
+gravity = -0.3
+jump_force = 7
+acceleration = 0.6
+dashing_acceleration = 0.1
+speed_cap = 6
+gravity_speed_cap = -8.5
+friction = 0.85
+drifting_friction = 0.175
+room = "tutorial_1"
+#---------------------------------------------------------------
+def draw_rectangle(bottom_left_x, bottom_left_y, top_right_x, top_right_y):
+    global x
+    global y
+    room_drawer.penup()
+    room_drawer.setposition(-camera_x +bottom_left_x, -camera_y +bottom_left_y)
+    room_drawer.pendown()
+    room_drawer.begin_fill()
+    #room_drawer.color(red_room_color, green_room_color, blue_room_color)
+    room_drawer.color("purple")
+    for i in range(2):
+        room_drawer.setposition(-camera_x +top_right_x, -camera_y + bottom_left_y)
+        room_drawer.setposition(-camera_x +top_right_x, -camera_y + top_right_y)
+        room_drawer.setposition(-camera_x +bottom_left_x, -camera_y + top_right_y)
+        room_drawer.setposition(-camera_x +bottom_left_x, -camera_y + bottom_left_y)
+    room_drawer.end_fill()
+
+def draw_room():
+    global room
+    global x
+    global y
+    room_drawer.penup()
+    room_drawer.setposition(-200, -200)
+    room_drawer.color("#2b3848")
+    room_drawer.begin_fill()
+    for i in range(4):
+        room_drawer.forward(400)
+        room_drawer.left(90)
+    room_drawer.end_fill()
+    room_drawer.color("purple")
+    
+    if room == "1":
+        draw_rectangle(-200, -175, 50, -150)
+        draw_rectangle(50, -175, 75, -125)
+        draw_rectangle(75, -150, 100, -100)
+        draw_rectangle(-100, -75, 25, -50)
+        draw_rectangle(-200, -175, -175, 225)
+        draw_rectangle(100, -125, 600, -75)
+        draw_rectangle(575, -25, 600, 325)
+        draw_rectangle(200, 100, 500, 125)
+    
+    elif room == "2":
+        draw_rectangle(-200, -125, 175, -75)
+    
+    elif room == "tutorial_1":
+        draw_rectangle(-200, -240, 260, -160)
+        if panic == 0:
+            draw_rectangle(-200, -240, -160, 400)
+        draw_rectangle(260, -240, 300, -120)
+        draw_rectangle(300, -240, 340, -80)
+        draw_rectangle(340, -240, 480, -40)
+        draw_rectangle(480, -240, 520, 20)
+        draw_rectangle(520, -240, 680, 80)
+        draw_rectangle(800, 40, 920, 80)
+        draw_rectangle(1040, 40, 1160, 80)
+        draw_rectangle(1280, -240, 1480, 80)
+        draw_rectangle(-240, 400, 1440, 440)
+        draw_rectangle(1440, 120, 1480, 440)
+    
+    elif room == "tutorial_2":
+        draw_rectangle(-200, -200, 240, 1000)
+        draw_rectangle(-200, 1040, -160, 1500)
+        draw_rectangle(240, -200, 700, 600)
+        draw_rectangle(460, 640, 500, 1500)
+        draw_rectangle(700, -200, 800, 700)
+        draw_rectangle(800, -200, 1000, 800)
+        draw_rectangle(1100, -200, 1200, 1500)
+        draw_rectangle(-200, 1460, 2000, 1500)
+    
+    elif room == "tutorial_3":
+        draw_rectangle(-200, -200, 200, -160)
+        draw_rectangle(-200, -160, -160, 600)
+        draw_rectangle(-60, 160, -20, 600)
+        draw_rectangle(-20, 160, 380, 600)
+        draw_rectangle(200, -200, 300, 100)
+        draw_rectangle(300, -200, 700, -160)
+        draw_rectangle(380, -100, 420, 600)
+        draw_rectangle(420, 0, 580, 600)
+        draw_rectangle(700, -200, 900, 400)
+        draw_rectangle(580, 500, 900, 600)
+        draw_rectangle(640, 100, 700, 120)
+        draw_rectangle(580, 300, 640, 320)
+    
+    elif room == "tutorial_4":
+        draw_rectangle(-200, -200, -60, 320)
+        draw_rectangle(-60, -200, 820, -160)
+        draw_rectangle(40, -80, 340, -40)
+        draw_rectangle(-60, 40, 240, 80)
+        draw_rectangle(340, -120, 380, 400)
+        draw_rectangle(40, 160, 340, 200)
+        draw_rectangle(-60, 280, 240, 320)
+        draw_rectangle(-200, 400, 380, 500)
+        draw_rectangle(380, -20, 620, 500)
+        draw_rectangle(580, -120, 620, -20)
+        draw_rectangle(820, -200, 1000, 300)
+        draw_rectangle(620, 80, 680, 120)
+        draw_rectangle(760, 80, 820, 120)
+        draw_rectangle(620, 460, 1000, 500)
+    
+    elif room == "tutorial_6":
+        draw_rectangle(-200, -600, 620, 0)
+        draw_rectangle(-200, 100, 620, 700)
+        draw_rectangle(360, 0, 440, 40)
+        draw_rectangle(570, 0, 620, 100)
+    
+    elif room == "tutorial_7":
+        draw_rectangle(-200, -200, 200, -160)
+        draw_rectangle(-200, -160, -160, 300)
+        draw_rectangle(160, -120, 200, 300)
+        draw_rectangle(-120, 0, 120, 340)
+        draw_rectangle(-200, 340, 200, 380)
+#---------------------------------------------------------------
+def check_for_room_for_x(next_room, next_x_position, bottom_left_x, bottom_left_y, top_right_x, top_right_y):
+    global last_value
+    global y
+    global y_speed
+    global x
+    global x_speed
+    global room
+    global y
+    global anchor
+    global anchor_x
+    global anchor_y
+    global player_x
+    global player_y
+    if x > bottom_left_x and x < top_right_x and y > bottom_left_y and y < top_right_y:
+        room = next_room
+        x = next_x_position
+
+def check_for_room_for_y(next_room, next_y_position, bottom_left_x, bottom_left_y, top_right_x, top_right_y):
+    global last_value
+    global y
+    global y_speed
+    global x
+    global x_speed
+    global room
+    global y
+    global anchor
+    global anchor_x
+    global anchor_y
+    global player_x
+    global player_y
+    if x > bottom_left_x and x < top_right_x and y > bottom_left_y and y < top_right_y:
+        room = next_room
+        y = next_y_position
+
+def check_for_room_for_x_and_y(next_room, next_x_position, next_y_position, bottom_left_x, bottom_left_y, top_right_x, top_right_y):
+    global last_value
+    global y
+    global y_speed
+    global x
+    global x_speed
+    global room
+    global y
+    global anchor
+    global anchor_x
+    global anchor_y
+    global camera_x
+    global camera_y
+    global player_x
+    global player_y
+    global orb_x
+    global orb_y
+    if x > bottom_left_x and x < top_right_x and y > bottom_left_y and y < top_right_y:
+        room = next_room
+        player_x = 0
+        player_y = 0
+        x = next_x_position
+        y = next_y_position
+        camera_x = next_x_position
+        camera_y = next_y_position
+        orb_x = next_x_position + 100
+        orb_y = next_y_position
+#---------------------------------------------------------------
+def draw_and_check_for_treasure(treasure_x, treasure_y):
+    global panic
+    global x
+    global y
+    global frame
+    global last_frame
+    global panic_starting_frame
+    global orb_x
+    global orb_y
+    if panic == 0:
+        treasure.setposition(-camera_x + treasure_x, -camera_y + treasure_y)
+    if x >= treasure_x - 10 and x <= treasure_x + 10 and y >= treasure_y - 50 and y <= treasure_y + 8 and panic == 0:
+        panic = 1
+        panic_starting_frame = 0
+        last_frame = -60
+        frame = 0
+        treasure.setposition(1000, 1000)
+        treasure.color("yellow")
+        treasure.shape("circle")
+
+def check_rectangle_for_x(bottom_left_x, bottom_left_y, top_right_x, top_right_y):
+    global falling
+    global last_value
+    global y
+    global y_speed
+    global x
+    global x_speed
+    global room
+    global jumping
+    global dashing
+    if x >= bottom_left_x - 9 and x <= top_right_x + 9 and y >= bottom_left_y - 8 and y <= top_right_y + 8:
+        x = last_value
+        if dashing == 0:
+            x_speed = 0
+        if dashing == 1:
+            wallrun()
+
+def check_rectangle_for_y(bottom_left_x, bottom_left_y, top_right_x, top_right_y):
+    global falling
+    global last_value
+    global y
+    global y_speed
+    global x
+    global x_speed
+    global room
+    global jumping
+    global dashing
+    global pounding
+    global gravity
+    global gravity_speed_cap
+    global wallrunning
+    if x >= bottom_left_x - 9 and x <= top_right_x + 9 and y >= bottom_left_y - 8 and y <= top_right_y + 8:
+        y = last_value
+        if y_speed < 0:
+            falling = 0
+            gravity = -0.3
+            gravity_speed_cap = -8.5
+            pounding = 0
+        y_speed = 0
+        if wallrunning == 1:
+            wallrunning = 0
+            y -= abs(x_speed) * 3
+            x_speed = 0
+
+def anchor_for_x(minimum_value, maximum_value):
+    global anchoring_x
+    global anchor_x
+    global anchor_y
+    if x >= maximum_value:
+        anchoring_x = 1
+        anchor_x = maximum_value
+    elif x <= minimum_value:
+        anchoring_x = 1
+        anchor_x = 0
+    else:
+        anchoring_x = 0
+        anchor_x = "undefined"
+
+def anchor_for_y(minimum_value, maximum_value):
+    global anchoring_y
+    global anchor_x
+    global anchor_y
+    if y <= minimum_value:
+        anchoring_y = 1
+        anchor_y = minimum_value
+    elif y >= maximum_value:
+        anchoring_y = 1
+        anchor_y = maximum_value
+    else:
+        anchoring_y = 0
+        anchor_y = "undefined"
+
+def draw_and_check_for_text_box(x_position, y_position, line_one, line_two, line_three, line_four, line_five, line_six):
+    global line_one_text
+    global line_two_text
+    global line_three_text
+    global line_four_text
+    global line_five_text
+    global line_six_text
+    global drawing_text_box
+    global x
+    global y
+    global camera_x
+    global camera_y
+
+    room_drawer.color("#6b6b6b")
+    room_drawer.penup()
+    room_drawer.setposition(-camera_x + x_position - 50, -camera_y + y_position - 25)
+    room_drawer.setheading(0)
+    room_drawer.pendown()
+    room_drawer.pendown()
+    room_drawer.pensize(0.1 * 50)
+    room_drawer.begin_fill()
+    for i in range(4):
+        room_drawer.forward(50 * 2)
+        room_drawer.left(90)
+        room_drawer.forward(50)
+        room_drawer.left(90)
+    room_drawer.color("#424242")
+    room_drawer.end_fill()
+    room_drawer.penup()
+    
+    if x >= x_position - 60 and x <= x_position + 60 and y >= y_position - 35 and y <= y_position + 35:
+        drawing_text_box = 1
+        line_one_text = line_one
+        line_two_text = line_two
+        line_three_text = line_three
+        line_four_text = line_four
+        line_five_text = line_five
+        line_six_text = line_six
+
+def draw_arrow(x_position, y_position, heading_amount):
+    global x
+    global y
+    global camera_x
+    global camera_y
+    global blue_room_color
+    global red_room_color
+    global green_room_color
+
+    room_drawer.color(red_room_color * 0.5, green_room_color * 0.5, blue_room_color * 0.5)
+    room_drawer.penup()
+    room_drawer.setposition(-camera_x + x_position - 50, -camera_y + y_position - 25)
+    room_drawer.pendown()
+    room_drawer.pensize(5)
+    room_drawer.setheading(heading_amount)
+    room_drawer.begin_fill()
+    for i in range(2):
+        room_drawer.forward(40)
+        room_drawer.right(90)
+        room_drawer.forward(20)
+        room_drawer.left(135)
+        room_drawer.forward(42.42640687)
+        room_drawer.left(90)
+        room_drawer.forward(42.42640687)
+        room_drawer.left(135)
+        room_drawer.forward(20)
+        room_drawer.right(90)
+        room_drawer.forward(40)
+        room_drawer.left(90)
+        room_drawer.forward(20)
+        room_drawer.left(90)
+    room_drawer.color(blue_room_color * 0.5, red_room_color * 0.5, green_room_color * 0.5)
+    room_drawer.setheading(0)
+    room_drawer.end_fill()
+#---------------------------------------------------------------
+def fix_overlap_for_and_anchor_x():
+    global falling
+    global last_value
+    global y
+    global y_speed
+    global x
+    global x_speed
+    global room
+    global jumping
+    global dashing
+    global anchor
+    global anchor_x
+    if room == "1":
+        anchor_for_x(0, 400)
+        check_rectangle_for_x(-200, -175, 50, -150)
+        check_rectangle_for_x(50, -175, 75, -125)
+        check_rectangle_for_x(75, -150, 100, -100)
+        check_rectangle_for_x(100, -125, 600, -75)
+        check_rectangle_for_x(-100, -75, 25, -50)
+        check_rectangle_for_x(-200, -175, -175, 225)
+        check_rectangle_for_x(575, -25, 600, 325)
+        check_rectangle_for_x(200, 100, 500, 125)
+    
+    elif room == "2":
+        anchor_for_x(0, 4000)
+        check_rectangle_for_x(-200, -125, 175, -75)
+    
+    elif room == "tutorial_1":
+        anchor_for_x(0, 1280)
+        check_rectangle_for_x(-200, -240, 260, -160)
+        if panic == 0:
+            check_rectangle_for_x(-200, -240, -160, 400)
+        check_rectangle_for_x(260, -240, 300, -120)
+        check_rectangle_for_x(300, -240, 340, -80)
+        check_rectangle_for_x(340, -240, 480, -40)
+        check_rectangle_for_x(480, -240, 520, 20)
+        check_rectangle_for_x(520, -240, 680, 80)
+        check_rectangle_for_x(800, 40, 920, 80)
+        check_rectangle_for_x(1040, 40, 1160, 80)
+        check_rectangle_for_x(1280, -240, 1480, 80)
+        check_rectangle_for_x(-240, 400, 1440, 440)
+        check_rectangle_for_x(1440, 120, 1480, 440)
+    
+    elif room == "tutorial_2":
+        anchor_for_x(0, 1000)
+        check_rectangle_for_x(-200, -200, 240, 1000)
+        check_rectangle_for_x(-200, 1040, -160, 1500)
+        check_rectangle_for_x(240, -200, 700, 600)
+        check_rectangle_for_x(460, 640, 500, 1500)
+        check_rectangle_for_x(700, -200, 800, 700)
+        check_rectangle_for_x(800, -200, 1000, 800)
+        check_rectangle_for_x(1100, -200, 1200, 1500)
+        check_rectangle_for_x(-200, 1460, 2000, 1500)
+    
+    elif room == "tutorial_3":
+        anchor_for_x(0, 700)
+        check_rectangle_for_x(-200, -200, 200, -160)
+        check_rectangle_for_x(-200, -160, -160, 600)
+        check_rectangle_for_x(-60, 160, -20, 600)
+        check_rectangle_for_x(-20, 160, 380, 600)
+        check_rectangle_for_x(200, -200, 300, 100)
+        check_rectangle_for_x(300, -200, 700, -160)
+        check_rectangle_for_x(380, -100, 420, 600)
+        check_rectangle_for_x(420, 0, 580, 600)
+        check_rectangle_for_x(700, -200, 900, 400)
+        check_rectangle_for_x(580, 500, 900, 600)
+        check_rectangle_for_x(640, 100, 700, 120)
+        check_rectangle_for_x(580, 300, 640, 320)
+    
+    elif room == "tutorial_4":
+        anchor_for_x(0, 800)
+        check_rectangle_for_x(-200, -200, -60, 320)
+        check_rectangle_for_x(-60, -200, 820, -160)
+        check_rectangle_for_x(40, -80, 340, -40)
+        check_rectangle_for_x(-60, 40, 240, 80)
+        check_rectangle_for_x(340, -120, 380, 400)
+        check_rectangle_for_x(40, 160, 340, 200)
+        check_rectangle_for_x(-60, 280, 240, 320)
+        check_rectangle_for_x(-200, 400, 380, 500)
+        check_rectangle_for_x(380, -20, 620, 500)
+        check_rectangle_for_x(580, -120, 620, -20)
+        check_rectangle_for_x(820, -200, 1000, 300)
+        check_rectangle_for_x(620, 80, 680, 120)
+        check_rectangle_for_x(760, 80, 820, 120)
+        check_rectangle_for_x(620, 460, 1000, 500)
+    
+    elif room == "tutorial_6":
+        anchor_for_x(0, 420)
+        check_rectangle_for_x(-200, -600, 620, 0)
+        check_rectangle_for_x(-200, 100, 620, 700)
+        check_rectangle_for_x(360, 0, 440, 40)
+        check_rectangle_for_x(570, 0, 620, 100)
+    
+    elif room == "tutorial_7":
+        anchor_for_x(0, 0)
+        check_rectangle_for_x(-200, -200, 200, -160)
+        check_rectangle_for_x(-200, -160, -160, 300)
+        check_rectangle_for_x(160, -120, 200, 300)
+        check_rectangle_for_x(-120, 0, 120, 340)
+        check_rectangle_for_x(-200, 340, 200, 380)
+        
+def fix_overlap_for_and_anchor_y():
+    global falling
+    global last_value
+    global y
+    global y_speed
+    global x
+    global x_speed
+    global room
+    global jumping
+    global dashing
+    global anchor
+    global anchor_y
+    if room == "1":
+        anchor_for_y(25, 5000)
+        check_rectangle_for_y(-200, -175, 50, -150)
+        check_rectangle_for_y(50, -175, 75, -125)
+        check_rectangle_for_y(75, -150, 100, -100)
+        check_rectangle_for_y(100, -125, 600, -75)
+        check_rectangle_for_y(-100, -75, 25, -50)
+        check_rectangle_for_y(-200, -175, -175, 225)
+        check_rectangle_for_y(575, -25, 600, 325)
+        check_rectangle_for_y(200, 100, 500, 125)
+    
+    elif room == "2":
+        anchor_for_y(25, 4000)
+        check_rectangle_for_y(-200, -125, 175, -75)
+    
+    elif room == "tutorial_1":
+        anchor_for_y(0, 240)
+        check_rectangle_for_y(-200, -240, 260, -160)
+        if panic == 0:
+            check_rectangle_for_y(-240, -240, -200, 400)
+        check_rectangle_for_y(260, -240, 300, -120)
+        check_rectangle_for_y(300, -240, 340, -80)
+        check_rectangle_for_y(340, -240, 480, -40)
+        check_rectangle_for_y(480, -240, 520, 20)
+        check_rectangle_for_y(520, -240, 680, 80)
+        check_rectangle_for_y(800, 40, 920, 80)
+        check_rectangle_for_y(1040, 40, 1160, 80)
+        check_rectangle_for_y(1280, -240, 1480, 80)
+        check_rectangle_for_y(-240, 400, 1440, 440)
+        check_rectangle_for_y(1400, 120, 1480, 440)
+    
+    elif room == "tutorial_2":
+        anchor_for_y(200, 1300)
+        check_rectangle_for_y(-200, -200, 240, 1000)
+        check_rectangle_for_y(-200, 1040, -160, 1500)
+        check_rectangle_for_y(240, -200, 700, 600)
+        check_rectangle_for_y(460, 640, 500, 1500)
+        check_rectangle_for_y(700, -200, 800, 700)
+        check_rectangle_for_y(800, -200, 1000, 800)
+        check_rectangle_for_y(1100, -200, 1200, 1500)
+        check_rectangle_for_y(-200, 1460, 2000, 1500)
+    
+    elif room == "tutorial_3":
+        anchor_for_y(0, 400)
+        check_rectangle_for_y(-200, -200, 200, -160)
+        check_rectangle_for_y(-200, -160, -160, 600)
+        check_rectangle_for_y(-60, 160, -20, 600)
+        check_rectangle_for_y(-20, 160, 380, 600)
+        check_rectangle_for_y(200, -200, 300, 100)
+        check_rectangle_for_y(300, -200, 700, -160)
+        check_rectangle_for_y(380, -100, 420, 600)
+        check_rectangle_for_y(420, 0, 580, 600)
+        check_rectangle_for_y(700, -200, 900, 400)
+        check_rectangle_for_y(580, 500, 900, 600)
+        check_rectangle_for_y(640, 100, 700, 120)
+        check_rectangle_for_y(580, 300, 640, 320)
+    
+    elif room == "tutorial_4":
+        anchor_for_y(0, 300)
+        check_rectangle_for_y(-200, -200, -60, 320)
+        check_rectangle_for_y(-60, -200, 820, -160)
+        check_rectangle_for_y(40, -80, 340, -40)
+        check_rectangle_for_y(-60, 40, 240, 80)
+        check_rectangle_for_y(340, -120, 380, 400)
+        check_rectangle_for_y(40, 160, 340, 200)
+        check_rectangle_for_y(-60, 280, 240, 320)
+        check_rectangle_for_y(-200, 400, 380, 500)
+        check_rectangle_for_y(380, -20, 620, 500)
+        check_rectangle_for_y(580, -120, 620, -20)
+        check_rectangle_for_y(820, -200, 1000, 300)
+        check_rectangle_for_y(620, 80, 680, 120)
+        check_rectangle_for_y(760, 80, 820, 120)
+        check_rectangle_for_y(620, 460, 1000, 500)
+    
+    elif room == "tutorial_6":
+        anchor_for_y(0, 500)
+        check_rectangle_for_y(-200, -600, 620, 0)
+        check_rectangle_for_y(-200, 100, 620, 700)
+        check_rectangle_for_y(360, 0, 440, 40)
+        check_rectangle_for_y(570, 0, 620, 100)
+    
+    elif room == "tutorial_7":
+        anchor_for_y(0, 180)
+        check_rectangle_for_y(-200, -200, 200, -160)
+        check_rectangle_for_y(-200, -160, -160, 300)
+        check_rectangle_for_y(160, -120, 200, 300)
+        check_rectangle_for_y(-120, 0, 120, 340)
+        check_rectangle_for_y(-200, 340, 200, 380)
+
+def draw_and_check_for_other_things():
+    global room
+    global camera_y
+    global lap
+    global win
+    global last_value
+    global y
+    global y_speed
+    global x
+    global x_speed
+    global room
+    global y
+    global anchor
+    global anchor_x
+    global anchor_y
+    global camera_x
+    global camera_y
+    global player_x
+    global player_y
+    global orb_x
+    global orb_y
+    global orb_speed
+    global frame
+    global win
+    global arbitrary_value_that_will_never_change
+    # draw_arrow(0, 0, 0)
+    # draw_and_check_for_text_box(0, 0, "", "", "", "", "", "")
+    # check_for_room_for_x_and_y("", 0, 0, 1, 1, 1, 1)
+    if room == "1":
+        draw_and_check_for_text_box(300, -35, "this", "is", "the", "first", "text", "box")
+        draw_and_check_for_text_box(350, 165, "this", "is", "the", "second", "text", "box")
+        draw_arrow(190, 100, 90)
+        check_for_room_for_x("2", -200, 600, -200, 800, 400)
+    
+    elif room == "2":
+        check_for_room_for_x("1", 600, -400, -200, -200, 400)
+        check_for_room_for_x_and_y("2", -100, -60, -200, -400, 2000, -200)
+    
+    elif room == "tutorial_1":
+        check_for_room_for_x_and_y("tutorial_1", 400, -25, 660, -260, 1300, -240)
+        check_for_room_for_x_and_y("tutorial_2", -200, 1009, 1480, 80, 1500, 120)
+        draw_and_check_for_text_box(-100, -125, "Welcome to the tutorial!", "This level is made to teach you", "the controls. Tap [A] and [D]", "to move left and right. Tap [S]", "to stop moving.", "")
+        draw_and_check_for_text_box(190, -125, "Press [SPACE] to jump.", "", "", "", "", "")
+        draw_and_check_for_text_box(410, -5, "Try to get past the next", "platforms!", "", "", "", "")
+        check_for_room_for_x_and_y("tutorial_7", 200, -151, -220, -200, -200, 400)
+    
+    elif room == "tutorial_2":
+        check_for_room_for_x_and_y("tutorial_1", 1480, 89, -240, 1000, -200, 1040)
+        check_for_room_for_x_and_y("tutorial_3", -110, 600, 1000, -200, 1100, 0)
+        draw_and_check_for_text_box(0, 1040, "Press [J] while in the air to", "fastfall! It stops all of your", "momentumum and makes you", "fall faster.", "", "")
+        draw_and_check_for_text_box(570, 640, "You can also use the fastfall as", "a psuedo double-jump.", "", "", "", "")
+        draw_arrow(390, 1000, 270)
+        draw_arrow(1090, 900, 270)
+        draw_arrow(1090, 600, 270)
+        draw_arrow(1090, 300, 270)
+    
+    elif room == "tutorial_3":
+        check_for_room_for_x_and_y("tutorial_2", 1050, 9, -160, 600, -60, 620)
+        check_for_room_for_x_and_y("tutorial_4", -200, 329, 900, 400, 920, 500)
+        draw_and_check_for_text_box(-100, -125, "Tap [Shift] to toggle the dash!", "The dash makes you move faster", "and also lets you run up walls!", "You can wall jump by pressing", "[Space] while on a wall.", "")
+        draw_arrow(725, 75, 180)
+        draw_arrow(650, 250, 0)
+    
+    elif room == "tutorial_4":
+        check_for_room_for_x_and_y("tutorial_3", 900, 409, -220, 320, -200, 400)
+        check_for_room_for_x_and_y("tutorial_6", -200, 9, 1000, 300, 1020, 460)
+        draw_and_check_for_text_box(-60, 360, "If you turn while dashing, you", "will drift. This makes it so that", "when you come to a stop,", "all of your speed will be", "converted into the other", "direction.")
+        draw_and_check_for_text_box(480, -120, "If you tap [w] while at max", "dashing speed, you can perform", "a superjump. Press [a] or [d] to", "cancel the superjump and move", "towards the direction you", "pressed.")
+        draw_arrow(780, 0, 90)
+        draw_arrow(740, 390, 0)
+    
+    elif room == "tutorial_6":
+        check_for_room_for_x_and_y("tutorial_4", 1000, 309, -220, 0, -200, 100)
+        draw_and_check_for_text_box(0, 40, "At the end of this hallway", "is the tower treasure. When", "you pick it up, the escape", "sequence starts and you need", "to get back to the beginning", "of the level.")
+        draw_and_check_for_treasure(400, 60)
+    
+    elif room == "tutorial_7":
+        draw_and_check_for_text_box(0, -125, "If you take the left path, you", "will reach the win screen. If", "you take the right path, you", "can do a second lap of the exit", "for extra rewards.", "")
+        check_for_room_for_x_and_y("tutorial_1", -200, -151, 200, -200, 220, -100)
+        if x > 200 and x < 220 and y > 300 and y < 340:
+            room = "tutorial_6"
+            player_x = 0
+            player_y = 0
+            x = 400
+            y = 60
+            camera_x = 400
+            camera_y = 60
+            orb_x = 400 + 1000
+            orb_y = 60
+            orb_speed += 0.5
+            lap += 1
+            frame += 12000
+        if x > -220 and x < -200 and y > 300 and y < 340:
+            win = 1
+            arbitrary_value_that_will_never_change = 0
+
+def move_in_steps(steps):
+    global last_value
+    global y
+    global y_speed
+    global x
+    global x_speed
+    global falling
+    falling += 1
+    for i in range(int(steps)):
+        last_value = x
+        x += x_speed/steps
+        fix_overlap_for_and_anchor_x()
+    for i in range(int(steps)):
+        last_value = y
+        y += y_speed/steps
+        fix_overlap_for_and_anchor_y()
+#---------------------------------------------------------------
+def jump():
+    global y_speed
+    global jumping
+    global jump_force
+    global falling
+    global drifting
+    global wallrun_jumping
+    wallrun_jumping = 1
+    if falling <= 0 and drifting == 0:
+        y_speed = jump_force
+
+def breakdance():
+    global y_speed
+    global x_speed
+    global left
+    global right
+    global jumping
+    global jump_force
+    global falling
+    global dashing
+    global drifting
+    global wallrun_jumping
+    dashing = 1
+    if falling <= 0 and drifting == 0 and dashing == 1:
+        if left == 1:
+            x_speed = speed_cap * -1
+        elif right == 1:
+            x_speed = speed_cap
+
+def jetpack():
+    global y_speed
+    y_speed = 5
+
+def turn_left():
+    global left
+    global right
+    left = 1
+    right = 0
+
+def turn_right():
+    global left
+    global right
+    left = 0
+    right = 1
+
+def stop():
+    global left
+    global right
+    global dashing
+    global drifting
+    global potential_x_speed
+    left = 0
+    right = 0
+    dashing = 0
+    potential_x_speed = 0
+    drifting = 0
+
+def dive_or_pound():
+    global dashing
+    global y_speed
+    global super_jumping
+    global pounding
+    global gravity_speed_cap
+    global x_speed
+    global left
+    global right
+    if dashing == 1 and y_speed > -5 and falling != 0 and super_jumping != 1:
+        y_speed = -5
+    elif dashing == 0 and falling != 0 and super_jumping != 1 and pounding == 0:
+        pounding = 1
+        y_speed = 5
+        gravity_speed_cap = -17
+        x_speed = 0
+        left = 0
+        right = 0
+
+def super_jump():
+    global super_jumping
+    global speed_cap
+    global falling
+    global potential_x_speed
+    global right
+    global left
+    if abs(x_speed) >= speed_cap and falling == 0:
+        left = 0
+        right = 0
+        potential_x_speed = abs(x_speed)
+        super_jumping = 1
+
+def dash():
+    global dashing
+    global potential_x_speed
+    global drifting
+    if dashing < 1:
+        dashing = 1
+    else:
+        dashing = 0
+        potential_x_speed = 0
+        drifting = 0
+
+def wallrun():
+    global x_speed
+    global y_speed
+    global y
+    global left
+    global right
+    global heading
+    global dashing
+    global falling
+    global potential_x_speed
+    global drifting
+    global wallrunning
+    global wallrun_jumping
+    global set_heading_amount
+    wallrunning = 1
+    y_speed = 0
+    y += abs(x_speed) * 0.125
+    if x_speed > 0 and x_speed < speed_cap:
+        x_speed += 0.01
+    elif x_speed < 0 and x_speed > -1 * speed_cap:
+        x_speed -= 0.01
+    if wallrun_jumping == 1:
+        x_speed = x_speed * -1
+        y_speed = abs(x_speed) * 0.65
+        wallrun_jumping = 0
+        if right == 1:
+            right = 0
+            left = 1
+            set_heading_amount = 180
+        elif left == 1:
+            right = 1
+            left = 0
+            set_heading_amount = 0
+
+def move():
+    global right
+    global x_speed
+    global left
+    global y_speed
+    global heading
+    global dashing
+    global falling
+    global potential_x_speed
+    global drifting
+    global pounding
+    global super_jumping
+    global gravity
+    
+    if super_jumping == 1:
+        x_speed = x_speed * friction
+        if x_speed > -0.1 and x_speed < 0.1:
+            if y_speed <= 0 and y_speed >= -0.8 and falling == 0:
+                y_speed = 6
+                x_speed = 0
+            elif y_speed >= 0:
+                y_speed += 0.35
+            else:
+                super_jumping = 0
+            if left == 1:
+                x_speed = -1 * potential_x_speed
+                y_speed = 3
+                super_jumping = 0
+            elif right == 1:
+                y_speed = 3
+                x_speed = potential_x_speed
+                super_jumping = 0
+
+    elif dashing == 0:
+        if right == 1:
+            x_speed += acceleration
+        if left == 1:
+            x_speed -= acceleration
+        x_speed = x_speed * friction
+    
+    elif dashing == 1:
+        if right == 1:
+            if x_speed <= speed_cap and x_speed >= 0 and falling == 0:
+                x_speed += dashing_acceleration
+            if x_speed >= speed_cap:
+                x_speed = speed_cap
+            if x_speed < 0 and drifting == 0 and falling == 0:
+                drifting = 1
+                potential_x_speed = x_speed * -1
+        if left == 1:
+            if x_speed >= -1 * speed_cap and x_speed <= 0 and falling == 0:
+                x_speed -= dashing_acceleration
+            if x_speed <= -1 * speed_cap:
+                x_speed = -1 * speed_cap
+            if x_speed > 0 and drifting == 0 and falling == 0:
+                drifting = 1
+                potential_x_speed = x_speed * -1
+        if drifting == 1:
+            if right == 1:
+                if x_speed < 0:
+                    x_speed += drifting_friction
+                if x_speed >= 0 and falling == 0:
+                    x_speed = potential_x_speed
+                    drifting = 0
+            if left == 1:
+                if x_speed > 0:
+                    x_speed -= drifting_friction
+                if x_speed <= 0 and falling == 0:
+                    x_speed = potential_x_speed
+                    drifting = 0
+    
+    if pounding == 1:
+        gravity = -0.5
+
+    if x_speed < 0.25 and x_speed > -0.25 and right == 0 and left == 0:
+            x_speed = 0
+    if y_speed < (gravity_speed_cap):
+            y_speed = gravity_speed_cap
+#---------------------------------------------------------------
+def turn_and_color_tracy():
+    global x_speed
+    global y_speed
+    global y
+    global left
+    global right
+    global heading
+    global dashing
+    global falling
+    global potential_x_speed
+    global drifting
+    global wallrunning
+    global wallrun_jumping
+    global set_heading_amount
+    player.color(abs(x_speed * 48), y_speed * 43, y_speed * -1 * 43)
+    if dashing == 0:
+        if pounding == 1:
+            set_heading_amount = 270
+        elif right == 1:
+          set_heading_amount = 0
+        elif left == 1:
+            set_heading_amount = 180
+    elif dashing == 1:
+        if wallrunning == 1 or super_jumping == 1:
+            set_heading_amount = 90
+        elif wallrunning == 0 and set_heading_amount == 90:
+            if right == 1:
+                set_heading_amount = 0
+            if left == 1:
+                set_heading_amount = 180
+        elif right == 1 and falling == 0:
+            set_heading_amount = 0
+        elif left == 1 and falling == 0:
+            set_heading_amount = 180
+    if y_speed <= 0 and super_jumping == 0 and pounding == 0 and left == 0 and right == 0 and falling == 0 and set_heading_amount != 0 and set_heading_amount != 180:
+            set_heading_amount = 0
+    
+    if set_heading_amount == 0:
+        player.setheading(set_heading_amount + y_speed * 5.29411764)
+    elif set_heading_amount == 180:
+        player.setheading(set_heading_amount - y_speed * 5.29411764)
+    elif set_heading_amount == 90:
+        player.setheading(90)
+    elif set_heading_amount == 270:
+        player.setheading(270)
+
+def change_room_color():
+    global red_room_color
+    global green_room_color
+    global blue_room_color
+    global room_color_cycle
+    if room_color_cycle == 1:
+        green_room_color += 5
+        if green_room_color == 255:
+            room_color_cycle = 2
+    
+    elif room_color_cycle == 2:
+        red_room_color -= 5
+        if red_room_color == 0:
+            room_color_cycle = 3
+
+    elif room_color_cycle == 3:
+        blue_room_color += 5
+        if blue_room_color == 255:
+            room_color_cycle = 4
+    
+    elif room_color_cycle == 4:
+        green_room_color -= 5
+        if green_room_color == 0:
+            room_color_cycle = 5
+    
+    elif room_color_cycle == 5:
+        red_room_color += 5
+        if red_room_color == 255:
+            room_color_cycle = 6
+    
+    elif room_color_cycle == 6:
+        blue_room_color -= 5
+        if blue_room_color == 0:
+            room_color_cycle = 1
+
+def camera():
+    global x
+    global y
+    global x_speed
+    global y_speed
+    global camera_x
+    global camera_y
+    global player_x
+    global player_y
+    global anchor
+    global anchor_x
+    global anchor_y
+    if anchoring_x == 0 and anchoring_y == 0:
+        camera_x = x
+        camera_y = y
+    elif anchoring_y == 1 or anchoring_x == 1:
+        if anchor_x != "undefined":
+            camera_x = anchor_x
+            player_x = x - anchor_x
+        else:
+            camera_x = x
+        if anchor_y != "undefined":
+            camera_y = anchor_y
+            player_y = y - anchor_y
+        else:
+            camera_y = y
+        player.setposition(player_x, player_y)
+
+def draw_text_box():
+    global text_box_type
+    global drawing_text_box
+    global text_box_size
+    global line_one_text
+    global line_two_text
+    global line_three_text
+    room_drawer.color("black")
+    room_drawer.penup()
+    room_drawer.setposition(text_box_size * -1, text_box_size * -0.5 + 100)
+    room_drawer.pendown()
+    if text_box_size >= 1:
+        room_drawer.color("#6b6b6b")
+        room_drawer.pensize(0.05 * text_box_size)
+        room_drawer.begin_fill()
+        for i in range(4):
+            room_drawer.forward(text_box_size * 2)
+            room_drawer.left(90)
+            room_drawer.forward(text_box_size)
+            room_drawer.left(90)
+        room_drawer.color("#424242")
+        room_drawer.end_fill()
+    
+    if text_box_size >= 10:    
+        room_drawer.penup()
+        room_drawer.color("#000000")
+        room_drawer.setposition(0, text_box_size * 0.325 + 100)
+        room_drawer.write(line_one_text, font=("Trebuchet MS", text_box_size / 10), align = "center")
+        room_drawer.setposition(0, text_box_size * 0.175 + 100)
+        room_drawer.write(line_two_text, font=("Trebuchet MS", text_box_size / 10), align = "center")
+        room_drawer.setposition(0, text_box_size * 0.025 + 100)
+        room_drawer.write(line_three_text, font=("Trebuchet MS", text_box_size / 10), align = "center")
+        room_drawer.setposition(0, text_box_size * -0.125 + 100)
+        room_drawer.write(line_four_text, font=("Trebuchet MS", text_box_size / 10), align = "center")
+        room_drawer.setposition(0, text_box_size * -0.275 + 100)
+        room_drawer.write(line_five_text, font=("Trebuchet MS", text_box_size / 10), align = "center")
+        room_drawer.setposition(0, text_box_size * -0.425 + 100)
+        room_drawer.write(line_six_text, font=("Trebuchet MS", text_box_size / 10), align = "center")
+    room_drawer.pensize(1)
+    if text_box_size < 150 and drawing_text_box == 1:
+        text_box_size += 10
+    elif text_box_size >= 0 and drawing_text_box == 0:
+        text_box_size -= 10
+#---------------------------------------------------------------
+def panic_function():
+    global panic
+    global panic_box_height
+    global frame
+    global orb
+    if panic == 1:
+        room_drawer.penup()
+        room_drawer.setposition(-150, panic_box_height)
+        room_drawer.color("#ff7f00")
+        room_drawer.pensize(3)
+        room_drawer.pendown()
+        for i in range(2):
+            room_drawer.forward(300)
+            room_drawer.left(90)
+            room_drawer.forward(50)
+            room_drawer.left(90)
+        
+        if frame <= 12000:
+            room_drawer.penup()
+            room_drawer.color("#ff0000")
+            room_drawer.setposition(-150, panic_box_height)
+            room_drawer.begin_fill()
+            for i in range(2):
+                room_drawer.forward(frame/40)
+                room_drawer.left(90)
+                room_drawer.forward(50)
+                room_drawer.left(90)
+                if panic_box_height < -190:
+                    panic_box_height += 0.5
+        
+        if frame >= 12000:
+            orb_function()
+            room_drawer.color("#ffff00")
+            room_drawer.setposition(-150, panic_box_height)
+            room_drawer.begin_fill()
+            for i in range(2):
+                room_drawer.forward(300)
+                room_drawer.left(90)
+                room_drawer.forward(50)
+                room_drawer.left(90)
+                if panic_box_height > -300:
+                    panic_box_height -= 0.5
+        
+        room_drawer.end_fill()
+
+def orb_function():
+    global orb_x
+    global orb_y
+    global camera_x
+    global camera_y
+    global x
+    global y
+    global orb_speed
+    global arbitrary_value_that_will_never_change #why is this here?
+    
+    if orb_x < x:
+        orb_x += orb_speed
+    elif orb_x > x:
+        orb_x -= orb_speed
+    
+    if orb_y < y:
+        orb_y += orb_speed
+    elif orb_y > y:
+        orb_y -= orb_speed
+    
+    treasure.setposition(-camera_x + orb_x, -camera_y + orb_y)
+    
+    if x >= orb_x - 5 and x <= orb_x + 5 and y >= orb_y - 5 and y <= orb_y + 5:
+        arbitrary_value_that_will_never_change = 0 #THE LEGENDARY BETRAYAL OF ARBITRARY VALUE; IT DID CHANGE!!!!!! MUAHAHAHAHAAHAHAHA
+#---------------------------------------------------------------
+def set_values():
+    global jumping
+    global wallrun_jumping
+    global wallrunning
+    global frame
+    global pro_time
+    global igt
+    global drawing_text_box
+    jumping = 0
+    wallrun_jumping = 0
+    wallrunning = 0
+    frame += 1
+    pro_time = time.clock()
+    drawing_text_box = 0
+    igt += 1
+
+def add_values():
+    global frame
+    frame += 12000
+
+def print_values():
+    global x
+    global y
+    global falling
+    global wallrunning
+    global set_heading_amount
+    global frame
+    global last_frame
+    global pounding
+    global frames_per_second
+    global red_room_color
+    global green_room_color
+    global blue_room_color
+    
+    room_drawer.penup()
+    room_drawer.color("white")
+  
+    if pro_time % 1 >= 0 and pro_time % 1 <= 0.03 and frame - last_frame != 1:
+        frames_per_second = "fps: " + str((frame - last_frame))
+        last_frame = frame
+    
+
+    room_drawer.setposition(-190, 175)
+    room_drawer.write(frames_per_second, font=("Arial", 13))
+    """
+    room_drawer.setposition(-190, 145)
+    room_drawer.write(x // 1, font=("Arial", 11))
+    
+    room_drawer.setposition(-190, 115)
+    room_drawer.write(y // 1, font=("Arial", 11))
+    
+    room_drawer.setposition(-190, 85)
+    room_drawer.write(orb_x // 1, font=("Arial", 11))
+    
+    room_drawer.setposition(-190, 55)
+    room_drawer.write(orb_x // 1, font=("Arial", 11))
+    """
+    
+    #room_drawer.setposition(-190, 85)
+    #room_drawer.write(blue_room_color, font=("Arial", 11))
+    
+    room_drawer.color("purple")
+    room_drawer.pendown()
+#---------------------------------------------------------------
+draw_room()
+screen.onkey(add_values, "o")
+screen.onkey(jump, "Space")
+screen.onkey(breakdance, "k")
+screen.onkey(turn_left, "a")
+screen.onkey(turn_right, "d")
+screen.onkey(dash, "Shift")
+screen.onkey(stop, "s")
+screen.onkey(dive_or_pound, "j")
+screen.onkey(super_jump, "w")
+screen.onkey(jetpack, "v")
+screen.listen()
+#---------------------------------------------------------------
+while True:
+    
+    screen.tracer(2000000, 1) #Sets the game speed to a really fast value
+    
+    move()
+    move_in_steps(((abs(x_speed // 1)) + (abs(y_speed // 1)) + 2) // 1)
+    y_speed += gravity
+    camera()
+    draw_room()
+    draw_and_check_for_other_things()
+    turn_and_color_tracy()
+    draw_text_box()
+    change_room_color()
+    
+    set_values()
+    print_values()
+    
+    panic_function()
+    
+    screen.tracer(1, 1)
+    time.sleep(fps)
+    
+    if arbitrary_value_that_will_never_change == 0:
+        break
+#---------------------------------------------------------------
+
+if win == 0:
+    print("User error; bro actually thought he could escape a yellow circle. Try again.")
+if win == 1:
+    if lap == 1:
+        print("you won! good job :)")
+    elif lap == 2:
+        print("WOW YOU GOT TO LAP 2 GOOD JOB!!!!!!")
+    elif lap > 2:
+        print("HOLY YOU GOT PAST LAP 2 THATS AMAZING !!!!!!!")
+print("time: " + str(igt/60) + " in game seconds.")
+print("Thanks for playing!")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#hi :)

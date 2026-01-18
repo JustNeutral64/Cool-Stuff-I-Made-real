@@ -1,0 +1,324 @@
+#---------------------------------------------------------------
+"""
+Complete Documentation for turtle: 
+https://docs.python.org/3/library/turtle.html#turtle-methods
+"""
+#---------------------------------------------------------------
+speed(0)
+penup()
+setposition(400, 400)
+pendown()
+
+from turtle import *
+from turtle import Turtle
+import random
+import time
+import math
+from math import *
+screen = Screen()
+screen.tracer(2000000, 1)
+player = Turtle()
+room_drawer = Turtle()
+player.shape("classic")
+player.penup()
+player.home()
+player.speed(0)
+player.setposition(0, 0)
+player.color("white")
+player.hideturtle()
+room_drawer.speed(0)
+room_drawer.hideturtle()
+
+print("[w] to move forward, [s] to move backward, [a] to turn left, [d] to turn right, [Space] to stop actions.")
+#---------------------------------------------------------------
+left = 0
+right = 0
+last_x_cor = 0
+last_y_cor = 0
+forwards = 0
+backwards = 0
+direction = 0
+game_running = 1
+touching_level = 0
+distance = 0
+count = 0
+og_dir = 0
+#---------------------------------------------------------------
+def draw_rectangle(top_right_x, bottom_left_x, top_right_y, bottom_left_y):
+    global x
+    global y
+    room_drawer.penup()
+    room_drawer.setposition(bottom_left_x, bottom_left_y)
+    room_drawer.pendown()
+    room_drawer.begin_fill()
+    for i in range(2):
+        room_drawer.setposition(top_right_x, bottom_left_y)
+        room_drawer.setposition(top_right_x, top_right_y)
+        room_drawer.setposition(bottom_left_x, top_right_y)
+        room_drawer.setposition(bottom_left_x, bottom_left_y)
+    room_drawer.end_fill()
+
+def draw_room():
+    room_drawer.color("black")
+    draw_rectangle(200, -200, 200, -200)
+    room_drawer.color("purple")
+    draw_rectangle(200, -200, -180, -200)
+    draw_rectangle(200, -200, 200, 180)
+    draw_rectangle(200, 180, 180, -180)
+    draw_rectangle(140, 120, 140, 50)
+    draw_rectangle(-180, -200, 180, -180)
+    draw_rectangle(100, 80, 0, -100)
+    draw_rectangle(80, -20, 100, 80)
+    draw_rectangle(40, 0, -20, -80)
+    draw_rectangle(20, -140, 140, 120)
+    draw_rectangle(20, -140, -120, -140)
+    draw_rectangle(160, 120, -120, -160)
+    draw_rectangle(-100, -120, 60, -100)
+    draw_rectangle(-40, -60, 60, 0)
+
+def draw_raycast_room():
+    global distance
+    global raycaster_direction_add_amount
+    global touching_level
+    global count
+    global og_dir
+    og_dir = direction
+    room_drawer.color("black")
+    draw_rectangle(200, -200, 200, -200)
+    for i in range(0, 72, 1):
+        room_drawer.penup()
+        room_drawer.setposition(player.xcor(), player.ycor())
+        room_drawer.setheading((direction * -1) + 45 + (i + 1) * 2.5 * 0.5)
+        
+        count = 0
+        while touching_level != 1 and count <= 40:
+            room_drawer.forward(5)
+            distance += 5 - abs((i - 36) * 0.01)
+            check_room_for_raycast()
+            count += 1
+        
+        height = 4000/distance
+        
+        room_drawer.penup()
+        room_drawer.pensize(1)
+        room_drawer.setposition(-200 + (i + 1) * 11.11111 * 0.5, -1 * height)
+        if count <= 40:
+            room_drawer.color(0, 255 - distance * 2.5, 255 - distance * 2.5)
+        else:
+            room_drawer.color(0, 0, 0)
+        room_drawer.pendown()
+        room_drawer.setheading(0)
+        room_drawer.backward(3.5)
+        room_drawer.begin_fill()
+        for i in range(2):
+            room_drawer.forward(7)
+            room_drawer.left(90)
+            room_drawer.forward(height * 2)
+            room_drawer.left(90)
+        room_drawer.end_fill()
+        
+        
+        touching_level = 0
+        distance = 0
+        height = 0
+        count = 0
+    
+#---------------------------------------------------------------
+def check_rectangle(top_right_x, bottom_left_x, top_right_y, bottom_left_y):
+    global last_x_cor
+    global last_y_cor
+    global touching_level
+    global direction
+    if player.xcor() >= bottom_left_x and player.xcor() <= top_right_x and player.ycor() >= bottom_left_y and player.ycor() <= top_right_y:
+        player.setposition(last_x_cor, last_y_cor)
+
+def check_room():
+    check_rectangle(200, -200, -180, -200)
+    check_rectangle(200, -200, 200, 180)
+    check_rectangle(200, 180, 180, -180)
+    check_rectangle(140, 120, 140, 50)
+    check_rectangle(-180, -200, 180, -180)
+    check_rectangle(100, 80, 0, -100)
+    check_rectangle(80, -20, 100, 80)
+    check_rectangle(40, 0, -20, -80)
+    check_rectangle(20, -140, 140, 120)
+    check_rectangle(20, -140, -120, -140)
+    check_rectangle(160, 120, -120, -160)
+    check_rectangle(-100, -120, 60, -100)
+    check_rectangle(-40, -60, 60, 0)
+
+def check_rectangle_for_raycast(top_right_x, bottom_left_x, top_right_y, bottom_left_y):
+    global last_x_cor
+    global last_y_cor
+    global touching_level
+    global direction
+    if room_drawer.xcor() >= bottom_left_x and room_drawer.xcor() <= top_right_x and room_drawer.ycor() >= bottom_left_y and room_drawer.ycor() <= top_right_y:
+        touching_level = 1
+
+def check_room_for_raycast():
+    check_rectangle_for_raycast(200, -200, -180, -200)
+    check_rectangle_for_raycast(200, -200, 200, 180)
+    check_rectangle_for_raycast(200, 180, 180, -180)
+    check_rectangle_for_raycast(140, 120, 140, 50)
+    check_rectangle_for_raycast(-180, -200, 180, -180)
+    check_rectangle_for_raycast(100, 80, 0, -100)
+    check_rectangle_for_raycast(80, -20, 100, 80)
+    check_rectangle_for_raycast(40, 0, -20, -80)
+    check_rectangle_for_raycast(20, -140, 140, 120)
+    check_rectangle_for_raycast(20, -140, -120, -140)
+    check_rectangle_for_raycast(160, 120, -120, -160)
+    check_rectangle_for_raycast(-100, -120, 60, -100)
+    check_rectangle_for_raycast(-40, -60, 60, 0)
+#---------------------------------------------------------------
+def turn_left():
+    global left
+    global right
+    global forwards
+    global backwards
+    left = 1
+    right = 0
+    forwards = 0
+    backwards = 0
+
+def turn_right():
+    global left
+    global right
+    global forwards
+    global backwards
+    left = 0
+    right = 1
+    forwards = 0
+    backwards = 0
+
+def move_forwards():
+    global forwards
+    global backwards
+    global left
+    global right
+    forwards = 1
+    backwards = 0
+    left = 0
+    right = 0
+
+def move_backwards():
+    global forwards
+    global backwards
+    global left
+    global right
+    forwards = 0
+    backwards = 1
+    left = 0
+    right = 0
+
+def stop_turning():
+    global left
+    global right
+    global forwards
+    global backwards
+    left = 0
+    right = 0
+    forwards = 0
+    backwards = 0
+
+def turn_or_move():
+    global right
+    global left
+    global direction
+    global forwards
+    global backwards
+    global touching_level
+    if left == 1:
+        direction -= 6
+    elif right == 1:
+        direction += 6
+    
+    if forwards == 1:
+        move(4)
+    elif backwards == 1:
+        move(-4)
+    player.setheading((direction * -1) + 90)
+
+def move(steps):
+    global touching_level
+    global last_x_cor
+    global last_y_cor
+    last_x_cor = player.xcor()
+    last_y_cor = player.ycor()
+    player.forward(steps)
+#---------------------------------------------------------------
+screen.onkey(turn_right, "a")
+screen.onkey(turn_left, "d")
+screen.onkey(move_forwards, "w")
+screen.onkey(move_backwards, "s")
+screen.onkey(stop_turning, "Space")
+screen.listen()
+#---------------------------------------------------------------
+
+while True:
+    screen.tracer(999999999999999, 1)
+    room_drawer.pencolor("purple")
+    #draw_room()
+    draw_raycast_room()
+    check_room()
+    turn_or_move()
+    
+    screen.tracer(1, 1)
+    
+    touching_level = 0
+    if game_running == 0:
+        break
+#---------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#hi :)

@@ -1,0 +1,43 @@
+[gd_scene load_steps=9 format=3 uid="uid://cuv4vme4rwno0"]
+
+[ext_resource type="Script" uid="uid://vqmwqba656ut" path="res://scripts/grapplinghook.gd" id="1_hu6j5"]
+[ext_resource type="PackedScene" uid="uid://dtrbka1ef726o" path="res://scenes/killzone.tscn" id="3_hu6j5"]
+[ext_resource type="PackedScene" uid="uid://pqp5qaw561fr" path="res://scenes/coin.tscn" id="4_qsttf"]
+[ext_resource type="PackedScene" uid="uid://bgv5v2fxqlswe" path="res://scenes/platform.tscn" id="5_sir0p"]
+[ext_resource type="Script" uid="uid://dau0sjpn20v06" path="res://scripts/transmitter_node.gd" id="6_rwtji"]
+[ext_resource type="PackedScene" uid="uid://igrvuuxq8olq" path="res://scenes/player_2.tscn" id="7_e7apc"]
+[ext_resource type="PackedScene" uid="uid://dldudybvbewrw" path="res://scripts/tile_map_layer.tscn" id="7_rswge"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_cn5tm"]
+
+[node name="TestLevel" type="Node2D"]
+script = ExtResource("1_hu6j5")
+
+[node name="Killzone" parent="." instance=ExtResource("3_hu6j5")]
+position = Vector2(74, 141)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
+shape = SubResource("WorldBoundaryShape2D_cn5tm")
+
+[node name="Coins" type="Node" parent="."]
+
+[node name="Coin" parent="Coins" instance=ExtResource("4_qsttf")]
+position = Vector2(73, 68)
+
+[node name="Platforms" type="Node" parent="."]
+
+[node name="Platform" parent="Platforms" instance=ExtResource("5_sir0p")]
+position = Vector2(383, 5)
+
+[node name="TransmitterNode" type="Node" parent="."]
+script = ExtResource("6_rwtji")
+
+[node name="Player2" parent="." instance=ExtResource("7_e7apc")]
+collision_layer = 3
+collision_mask = 3
+
+[node name="Camera2D" type="Camera2D" parent="Player2"]
+zoom = Vector2(4, 4)
+
+[node name="TileMapLayer" parent="." instance=ExtResource("7_rswge")]
+position = Vector2(-122, -8)

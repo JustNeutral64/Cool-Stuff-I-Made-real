@@ -1,0 +1,45 @@
+Item 1
+0
+True
+False
+False
+Item 2
+0
+True
+False
+False
+Item 3
+0
+True
+False
+False
+Item 4
+0
+True
+False
+False
+Item 5
+0
+True
+False
+False
+Item 6
+0
+True
+False
+False
+Item 7
+0
+True
+False
+False
+Item 8
+0
+True
+False
+False
+Item 9
+1
+True
+False
+False

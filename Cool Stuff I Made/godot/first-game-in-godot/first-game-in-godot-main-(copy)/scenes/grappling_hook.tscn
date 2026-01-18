@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://bmksdpnyjplq2"]
+
+[ext_resource type="Texture2D" uid="uid://gx1xihdbejvu" path="res://assets/sprites/fruit.png" id="1_636o4"]
+[ext_resource type="Script" uid="uid://cqu4jjtmn7rtd" path="res://scripts/grappling_hook.gd" id="1_pmbmu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pmbmu"]
+atlas = ExtResource("1_636o4")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hfu38"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pmbmu")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xv4oh"]
+radius = 4.0
+
+[node name="GrapplingHook" type="Node2D"]
+script = ExtResource("1_pmbmu")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -2)
+sprite_frames = SubResource("SpriteFrames_hfu38")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_xv4oh")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="body_shape_entered" from="Area2D" to="." method="_on_area_2d_body_shape_entered"]
